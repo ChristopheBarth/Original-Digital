@@ -1,6 +1,6 @@
 .movie-container::after {
   background-color: rgb(161, 161, 161);
-  position: absolute;
+
   display: block;
   height: 1px;
   width: 90%;
@@ -32,6 +32,9 @@
   margin-top: 2rem;
   button {
     margin-top: 2rem;
+  }
+  a {
+    color: var(--secondary-color);
   }
 }
 
@@ -78,6 +81,9 @@
   background-size: cover;
   border-radius: var(--button-radius);
   margin: 5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   h2 {
     color: var(--secondary-color);
     font-weight: 500;
@@ -105,17 +111,7 @@
   }
 }
 
-.separation {
-  background-color: black;
-  position: relative;
-  display: block;
-  height: 1px;
-  width: 150px;
-  content: "";
-  transform: rotate(90deg) translateX(5rem);
-}
-
-.button-bottom {
+.button-premium {
   background-color: black;
   width: auto;
   color: var(--secondary-color);
@@ -123,27 +119,12 @@
   padding: 1rem 2rem;
   margin-top: 2rem;
   border-radius: var(--button-radius);
+  cursor: pointer;
 }
-@media only screen and (min-width: 391px) {
-  .movie-container::after {
-    display: none;
-  }
-}
-@media only screen and (min-width: 1440px) {
-  .card-movie-img img {
-    height: 20rem;
-    width: 15rem;
-    margin: 2rem 2rem 2rem 0;
-  }
 
-  .movie-container::after {
-    width: 91.5%;
-    content: "";
-    transform: translateY(30rem);
-    display: block;
-  }
-
-  .show-movies h2 {
-    margin-top: 5rem;
+@media only screen and (max-width: 792px) {
+  .first-container .img-container {
+    height: 18rem;
+    margin-top: 1rem;
   }
 }

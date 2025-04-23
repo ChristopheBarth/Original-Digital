@@ -105,7 +105,7 @@ export default function FormDashBoard() {
         type="text"
         name="landscape_image"
         onChange={handleChangeMovieForm}
-        placeholder="Landscape"
+        placeholder="URL"
       />
       <input type="submit" className="submit-form" />
     </form>

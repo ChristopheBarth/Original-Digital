@@ -24,23 +24,6 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-// ----------------------------------
-const readByGenre: RequestHandler = async (req, res, next) => {
-  try {
-    const genre = req.body.movie_genre as string;
-    const movies = await movieRepository.getMoviesByGenre(genre);
-    if (movies == null) {
-      res.sendStatus(404);
-    } else {
-      res.json(movies);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-// --------------------------------------
-
 const add: RequestHandler = async (req, res, next) => {
   console.info("dans add", req.body);
   try {
@@ -98,4 +81,4 @@ const destroy: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-export default { browse, read, add, edit, destroy, readByGenre };
+export default { browse, read, add, edit, destroy };

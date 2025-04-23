@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 
 const API = import.meta.env.VITE_API_URL;
@@ -9,9 +10,10 @@ const getMovies = () => {
     .then((response) => response.data)
     .catch((error) => console.error(error));
 };
+
 const getMovieById = (id: number) => {
   return axios
-    .get(`${API}/api/movies/${id}`)
+    .get(`${API}/api/movies/${id}`, { withCredentials: true })
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -104,6 +106,93 @@ const getAuthorizationForUsersOrAdmin = () => {
     });
 };
 
+const loginUser = (
+  loginData: LoginData,
+  navigate: ReturnType<typeof useNavigate>,
+  setRole: (role: string) => void,
+  setSubscription: (subscription: boolean) => void,
+) => {
+  const notifySuccess = () =>
+    toast.success("Bienvenue sur Original Digital 🚀", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+
+  const notifyError = (
+    errorMessage = "Erreur lors de la connexion, mot de passe ou email incorrect",
+  ) =>
+    toast.error(errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+
+  return axios
+    .post(`${API}/api/login`, loginData, { withCredentials: true })
+    .then(({ data }) => {
+      setRole(data.role);
+      setSubscription(data.subscription);
+      notifySuccess();
+      setTimeout(() => {
+        navigate(data.role === "administrateur" ? "/dashboard" : "/catalogue");
+      }, 3000);
+    })
+    .catch((error) => {
+      notifyError();
+      console.error(error);
+    });
+};
+
+const editPremium = (
+  navigate: ReturnType<typeof useNavigate>,
+  setSubscription: (subscription: boolean) => void,
+) => {
+  const notifySuccess = () =>
+    toast.success("Votre abonnement Premium a bien été activé 🚀", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+
+  return axios
+    .put(
+      `${API}/api/users/premium`,
+      {},
+      {
+        withCredentials: true,
+      },
+    )
+    .then((response) => {
+      if (response.status === 200) {
+        setSubscription(response.data.subscription);
+        notifySuccess();
+        setTimeout(() => {
+          navigate("/catalogue");
+        }, 3000);
+      }
+    })
+    .catch((error) => console.error(error));
+};
+
 export {
   getAuthorization,
   getAuthorizationForUsersOrAdmin,
@@ -112,4 +201,6 @@ export {
   getUsers,
   editMovie,
   createUser,
+  loginUser,
+  editPremium,
 };

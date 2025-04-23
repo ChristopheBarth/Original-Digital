@@ -11,18 +11,20 @@ export default function Dashboard() {
   return (
     <>
       <section className="dashboard-left">
-        <button type="button" onClick={() => setActiveComponent("dashboard")}>
-          Dashboard
-        </button>
-        <button type="button" onClick={() => setActiveComponent("form")}>
-          Ajout
-        </button>
-        <button type="button" onClick={() => setActiveComponent("users")}>
-          Utilisateur
-        </button>
-        <button type="button" onClick={() => setActiveComponent("edit")}>
-          Edit
-        </button>
+        <div className="button-container">
+          <button type="button" onClick={() => setActiveComponent("dashboard")}>
+            Dashboard
+          </button>
+          <button type="button" onClick={() => setActiveComponent("form")}>
+            Ajouter un film
+          </button>
+          <button type="button" onClick={() => setActiveComponent("users")}>
+            Liste utilisateurs
+          </button>
+          <button type="button" onClick={() => setActiveComponent("edit")}>
+            Modifier un film
+          </button>
+        </div>
       </section>
       <section className="dashboard-right">
         {activeComponent === "dashboard" && <HomeDashBoard />}
