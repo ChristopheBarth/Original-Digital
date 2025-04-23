@@ -57,3 +57,16 @@ interface UserType {
 interface WatchlistType {
   id: number;
 }
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface CardData {
+  cardName: string;
+  cardNumbers: string;
+  expiryDay: string;
+  cvv: string;
+  country: string;
+}

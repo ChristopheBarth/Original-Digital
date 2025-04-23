@@ -40,17 +40,7 @@ class MovieRepository {
   async read(id: number): Promise<Movie> {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT
-      m.id,
-      m.title,
-      m.synopsis,
-      m.release_year,
-      m.duration,
-      m.poster,
-      m.trailer,
-      m.casting,
-      m.production,
-      m.landscape_image,
-      m.premium,
+     m.*,
       GROUP_CONCAT(g.name SEPARATOR ', ') AS genres
       FROM movie m
       LEFT JOIN movie_genre mg ON m.id = mg.movie_id
@@ -66,17 +56,7 @@ class MovieRepository {
   async readAll(): Promise<Movie[]> {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT
-      m.id,
-      m.title,
-      m.synopsis,
-      m.release_year,
-      m.duration,
-      m.poster,
-      m.trailer,
-      m.casting,
-      m.production,
-      m.landscape_image,
-      m.premium,
+     m.*,
       GROUP_CONCAT(g.name SEPARATOR ', ') AS genres
       FROM movie m
       LEFT JOIN movie_genre mg ON m.id = mg.movie_id
@@ -113,21 +93,5 @@ class MovieRepository {
     );
     return result.affectedRows;
   }
-  // ---------------------------------------------------------------------
-  async getMoviesByGenre(genre: string): Promise<Movie[]> {
-    const [rows] = await databaseClient.query<Rows>(
-      `SELECT
-      m.*,
-      GROUP_CONCAT(g.name SEPARATOR ', ') AS genres
-      FROM movie m
-      JOIN movie_genre mg ON m.id = mg.movie_id
-      JOIN genre g ON mg.genre_id = g.id
-      WHERE g.name = ?
-      GROUP BY m.id`,
-      [genre],
-    );
-    return rows as Movie[];
-  }
-  // --------------------------------------------------------------------
 }
 export default new MovieRepository();

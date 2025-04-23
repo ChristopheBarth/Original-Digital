@@ -108,6 +108,7 @@ section > h2 {
   text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin: 1rem;
   margin-top: 2rem;
   a {
@@ -119,6 +120,13 @@ section > h2 {
   }
 }
 
+.all-element {
+  background: url("bg-header.png");
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 @media only screen and (min-width: 792px) {
   .all-element {
     display: flex;
@@ -126,6 +134,7 @@ section > h2 {
     height: 100%;
     justify-content: space-between;
     gap: 4rem;
+    background-image: none;
   }
 
   .bottom-element {
@@ -139,6 +148,9 @@ section > h2 {
     width: 70%;
     color: var(--secondary-color);
     padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .top-element {
@@ -164,6 +176,9 @@ section > h2 {
     width: 15rem;
     border-radius: var(--button-radius);
     margin-top: 4rem;
+    a {
+      color: var(--secondary-color);
+    }
   }
 
   .middle-element > h2 {
@@ -196,13 +211,8 @@ section > h2 {
   .input-mail {
     margin: 1rem;
     margin-top: 2rem;
-  }
-}
-
-@media only screen and (min-width: 1440px) {
-  .card-movie-img img {
-    height: 20rem;
-    width: 15rem;
-    margin: 2rem 2rem 2rem 0;
+    img {
+      display: none;
+    }
   }
 }

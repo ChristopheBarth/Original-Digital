@@ -1,35 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import axios from "axios";
 import { useState } from "react";
-import { Flip, ToastContainer, toast } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import { useAuth } from "../services/AuthContext";
+import { loginUser } from "../services/request";
 
 export default function Login() {
-  const API = import.meta.env.VITE_API_URL;
-  const notify = () =>
-    toast.error(
-      "Erreur lors de la connexion, mot de passe ou email incorrect",
-      {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Flip,
-      },
-    );
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
-  const navigate = useNavigate();
-
-  const { setRole } = useAuth();
+  const { setRole, setSubscription } = useAuth();
 
   const handleChangeCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({
@@ -37,29 +21,13 @@ export default function Login() {
       [e.currentTarget.name]: e.currentTarget.value,
     });
   };
-  const sendCredentials = (e: React.FormEvent<HTMLFormElement>) => {
+  const sendCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post(`${API}/api/login`, credentials, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setRole(response.data.role);
-        if (response.data.role === "administrateur") {
-          navigate("/dashboard");
-        } else {
-          navigate("/catalogue");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    loginUser(credentials, navigate, setRole, setSubscription);
   };
+
   return (
     <div>
-      <div>
-        <ToastContainer />
-      </div>
       <section className="login">
         <form className="login-page" onSubmit={sendCredentials}>
           <h2>Se Connecter</h2>
@@ -90,7 +58,20 @@ export default function Login() {
                 value={credentials.password}
               />
             </div>
-            <input type="submit" onClick={notify} value="Continuer" />
+            <input type="submit" value="Continuer" />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Bounce}
+            />
           </div>
         </form>
       </section>

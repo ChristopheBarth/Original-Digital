@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLoaderData, useRevalidator } from "react-router-dom";
 import "../styles/editdashboard.css";
 import { editMovie } from "../services/request";
@@ -8,6 +8,14 @@ export default function EditDashBoard() {
   const { movies } = useLoaderData() as { movies: MovieType[] };
   const { revalidate } = useRevalidator();
   const API = import.meta.env.VITE_API_URL;
+  const [movieToDelete, setMovieToDelete] = useState<MovieType | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  useEffect(() => {
+    if (showDeleteConfirmation && movieToDelete) {
+      deleteDialogRef.current?.showModal();
+    }
+  }, [showDeleteConfirmation, movieToDelete]);
 
   const deleteMovie = (id: number) => {
     return axios
@@ -16,6 +24,8 @@ export default function EditDashBoard() {
       })
       .then(() => {
         revalidate();
+        setMovieToDelete(null);
+        setShowDeleteConfirmation(false);
       })
       .catch((error) => console.error(error));
   };
@@ -52,6 +62,7 @@ export default function EditDashBoard() {
   };
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
 
   const openModal = (movie: MovieType) => {
     setUpdatedMovie(movie);
@@ -64,6 +75,17 @@ export default function EditDashBoard() {
     document.body.style.overflow = "";
   };
 
+  const openDeleteModal = (movie: MovieType) => {
+    setMovieToDelete(movie);
+    setShowDeleteConfirmation(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteConfirmation(false);
+    setMovieToDelete(null);
+    deleteDialogRef.current?.close();
+  };
+
   return (
     <section className="list-movie">
       {movies.map((movie) => (
@@ -71,8 +93,8 @@ export default function EditDashBoard() {
           <div className="dashboard-movielist">
             <p>{movie.title}</p>
           </div>
-          <div>
-            <button type="button" onClick={() => deleteMovie(movie.id)}>
+          <div className="button-edit">
+            <button type="button" onClick={() => openDeleteModal(movie)}>
               <img src="/GarbageIcone.png" alt="Delete" />
             </button>
             <button type="button" onClick={() => openModal(movie)}>
@@ -81,6 +103,53 @@ export default function EditDashBoard() {
           </div>
         </section>
       ))}
+      {showDeleteConfirmation && (
+        <dialog
+          ref={deleteDialogRef}
+          className="confirmation-modal"
+          onClick={closeDeleteModal}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              closeDeleteModal();
+            }
+          }}
+        >
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+            tabIndex={-1}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
+          >
+            <p>
+              Êtes-vous sûr de vouloir supprimer{" "}
+              <strong>{movieToDelete?.title}</strong> ?
+            </p>
+            <div className="confirmation-buttons">
+              <button
+                type="button"
+                className="confirm-button"
+                onClick={() =>
+                  movieToDelete !== null && deleteMovie(movieToDelete.id)
+                }
+              >
+                Confirmer
+              </button>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={closeDeleteModal}
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
       <dialog
         ref={dialogRef}
         className="modal"
@@ -186,7 +255,16 @@ export default function EditDashBoard() {
                 value={updatedMovie.landscape_image}
                 onChange={handleChangeMovieForm}
               />
-              <button type="submit">Modifier</button>
+              <button type="submit" className="modify-form">
+                Modifier
+              </button>
+              <button
+                type="submit"
+                className="close-modal"
+                onClick={closeModal}
+              >
+                Fermer
+              </button>
             </form>
           )}
         </div>

@@ -13,12 +13,6 @@
   --secondary-color: white;
   --button-radius: 4px;
 }
-.all-element {
-  background: url("bg-header.png");
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
 
 body {
   padding: 1rem;

@@ -6,22 +6,22 @@ import "../styles/homepage.css";
 export default function HomePage() {
   const [selectedOffer, setSelectedOffer] = useState("free");
   const movies = useLoaderData() as MovieType[];
+  const freeMovies = movies.filter((movie) => !movie.premium);
   return (
     <section className="all-element">
       <section className="top-element">
         <h1>L’original au service du digital</h1>
         <p>
-          Profitez d' un catalogue qui contient le meilleur du cinéma. Saisissez
+          Profitez d'un catalogue qui contient le meilleur du cinéma. Saisissez
           votre adresse e-mail pour nous rejoindre.
         </p>
         <div className="input-mail">
-          <input type="text" placeholder="Adresse e-mail" />
-          <Link to="/signup">S'inscrire</Link>
+          <img src="/image-homepage.png" alt="" />
         </div>
         <img src="/arrow-down.png" alt="" className="arrow" />
         <h2>Tendances Actuelles</h2>
         <section className="movie-container">
-          {movies.map((movie) => (
+          {freeMovies.map((movie) => (
             <MovieCards key={movie.id} movie={movie} />
           ))}
         </section>
@@ -66,7 +66,7 @@ export default function HomePage() {
         </div>
       </section>
       <div className="bottom-element">
-        <h2>N' attendez plus!</h2>
+        <h2>N'attendez plus!</h2>
         <Link to="/">Se connecter</Link>
       </div>
     </section>
