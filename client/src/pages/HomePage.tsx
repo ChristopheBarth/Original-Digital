@@ -26,7 +26,7 @@ export default function HomePage() {
           ))}
         </section>
       </section>
-      <section className="middle-element">
+      <section id="acces" className="middle-element">
         <h2>Nos différentes souscriptions</h2>
         <div className="offer">
           <button
@@ -47,7 +47,7 @@ export default function HomePage() {
         <div className="content">
           {selectedOffer === "free" ? (
             <div className="free">
-              <p>Visionnez 4 films par mois</p>
+              <p>Visionnez 4 films gratuits</p>
               <p className="disabled">Accédez à notre catalogue complet</p>
               <p className="disabled">Regardez en haute qualité</p>
               <p className="disabled">Gérez vos listes de films à voir</p>
@@ -65,10 +65,6 @@ export default function HomePage() {
           </button>
         </div>
       </section>
-      <div className="bottom-element">
-        <h2>N'attendez plus!</h2>
-        <Link to="/">Se connecter</Link>
-      </div>
     </section>
   );
 }

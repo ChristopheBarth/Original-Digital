@@ -14,7 +14,7 @@ type User = {
 class UserRepository {
   async create(user: Omit<User, "id">) {
     const [result] = await databaseClient.query<Result>(
-      "insert into user (first_name, last_name, email, hashed_password) values (?, ?, ?, ?)",
+      "INSERT INTO user (first_name, last_name, email, hashed_password) VALUES (?, ?, ?, ?)",
       [user.first_name, user.last_name, user.email, user.hashedPassword],
     );
 
@@ -31,15 +31,13 @@ class UserRepository {
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>(
-      "select *, first_name, last_name from user",
-    );
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM user");
     return rows as User[];
   }
 
   async readByEmailWithPassword(email: string) {
     const [rows] = await databaseClient.query<Rows>(
-      "select * from user where email = ?",
+      "SELECT * FROM user WHERE email = ?",
       [email],
     );
     return rows[0];
@@ -47,7 +45,7 @@ class UserRepository {
 
   async update(user: User) {
     const [result] = await databaseClient.query<Result>(
-      "update user set first_name = ?, last_name = ?, email = ?, hashed_password = ?, subscription = ?, role = ? where id = ?",
+      "UPDATE user SET first_name = ?, last_name = ?, email = ?, hashed_password = ?, subscription = ?, role = ? WHERE id = ?",
       [
         user.first_name,
         user.last_name,
@@ -60,9 +58,10 @@ class UserRepository {
     );
     return result.affectedRows;
   }
+
   async delete(id: number) {
     const [result] = await databaseClient.query<Result>(
-      "delete from user where id = ?",
+      "DELETE FROM user WHERE id = ?",
       [id],
     );
     return result.affectedRows;
